@@ -1,0 +1,4 @@
+package: github.com/sky0621/local-gitlab-project-updates
+import:
+- package: github.com/xanzy/go-gitlab
+  version: ~0.5.1
