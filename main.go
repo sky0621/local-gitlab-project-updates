@@ -5,6 +5,8 @@ import (
 	"flag"
 	"fmt"
 
+	"io/ioutil"
+
 	"os"
 
 	gitlab "github.com/xanzy/go-gitlab"
@@ -21,21 +23,9 @@ func main() {
 	outdir := flag.String("outdir", "./", "git {clone/pull} directory")
 	flag.Parse()
 
-	fp, err := os.Open(*outdir)
+	files, err := ioutil.ReadDir(*outdir)
 	if err != nil {
 		panic(err)
-	}
-	defer func() {
-		if fp != nil {
-			fp.Close()
-		}
-	}()
-	stat, err := fp.Stat()
-	if err != nil {
-		panic(err)
-	}
-	if !stat.IsDir() {
-		panic(errors.New("not directory"))
 	}
 
 	git := gitlab.NewClient(nil, *pkey)
@@ -77,7 +67,23 @@ func main() {
 				continue
 			}
 			fmt.Println(p.Path)
+			if exists(files, func(filename string) bool {
+				return filename == p.Path
+			}) {
+				fmt.Println("Exists!")
+			} else {
+				fmt.Println("Not Exists!")
+			}
 		}
 
 	}
+}
+
+func exists(files []os.FileInfo, fn func(filename string) bool) bool {
+	for _, file := range files {
+		if exists := fn(file.Name()); exists {
+			return true
+		}
+	}
+	return false
 }
