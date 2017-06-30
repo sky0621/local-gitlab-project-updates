@@ -9,9 +9,9 @@ import (
 
 	"os"
 
+	"os/exec"
+
 	"github.com/xanzy/go-gitlab"
-	"gopkg.in/src-d/go-git.v4"
-	. "gopkg.in/src-d/go-git.v4/_examples"
 )
 
 const (
@@ -73,13 +73,16 @@ func main() {
 				return filename == p.Path
 			}) {
 				fmt.Println("Exists!")
-				repository, err := git.PlainClone(*host, false, &git.CloneOptions{
-					RecurseSubmodules: git.DefaultSubmoduleRecursionDepth,
-				})
+				cdCmd := exec.Command("cd", *outdir)
+				err := cdCmd.Run()
 				if err != nil {
 					panic(err)
 				}
-				fmt.Printf("%#v\n", repository)
+				cloneCmd := exec.Command("git", "clone", p.WebURL)
+				err = cloneCmd.Run()
+				if err != nil {
+					panic(err)
+				}
 			} else {
 				fmt.Println("Not Exists!")
 			}
