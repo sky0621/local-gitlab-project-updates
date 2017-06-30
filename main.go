@@ -73,18 +73,18 @@ func main() {
 				return filename == p.Path
 			}) {
 				fmt.Println("Exists!")
-				cdCmd := exec.Command("cd", *outdir)
-				err := cdCmd.Run()
-				if err != nil {
-					panic(err)
-				}
-				cloneCmd := exec.Command("git", "clone", p.WebURL)
-				err = cloneCmd.Run()
-				if err != nil {
-					panic(err)
-				}
 			} else {
 				fmt.Println("Not Exists!")
+//				cdCmd := exec.Command("cd", *outdir)
+//				err := cdCmd.Run()
+//				if err != nil {
+//					panic(err)
+//				}
+				cloneCmd := exec.Command("git", "clone", p.WebURL)
+				err := cloneCmd.Run()
+				if err != nil {
+					panic(err)
+				}
 			}
 		}
 
