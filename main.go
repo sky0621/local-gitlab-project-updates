@@ -5,11 +5,11 @@ import (
 	"flag"
 	"fmt"
 
+	git "gopkg.in/src-d/go-git.v3"
+
 	"io/ioutil"
 
 	"os"
-
-	"os/exec"
 
 	"github.com/xanzy/go-gitlab"
 )
@@ -75,14 +75,11 @@ func main() {
 				fmt.Println("Exists!")
 			} else {
 				fmt.Println("Not Exists!")
-//				cdCmd := exec.Command("cd", *outdir)
-//				err := cdCmd.Run()
-//				if err != nil {
-//					panic(err)
-//				}
-				cloneCmd := exec.Command("git", "clone", p.WebURL)
-				err := cloneCmd.Run()
+				r, err := git.NewRepository(p.WebURL, nil)
 				if err != nil {
+					panic(err)
+				}
+				if err = r.PullDefault(); err != nil {
 					panic(err)
 				}
 			}
