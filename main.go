@@ -9,7 +9,9 @@ import (
 
 	"os"
 
-	gitlab "github.com/xanzy/go-gitlab"
+	"github.com/xanzy/go-gitlab"
+	"gopkg.in/src-d/go-git.v4"
+	. "gopkg.in/src-d/go-git.v4/_examples"
 )
 
 const (
@@ -28,10 +30,10 @@ func main() {
 		panic(err)
 	}
 
-	git := gitlab.NewClient(nil, *pkey)
-	git.SetBaseURL(fmt.Sprintf("%s/api/v3", *host))
+	gitCli := gitlab.NewClient(nil, *pkey)
+	gitCli.SetBaseURL(fmt.Sprintf("%s/api/v3", *host))
 
-	namespaces, res, err := git.Namespaces.ListNamespaces(&gitlab.ListNamespacesOptions{
+	namespaces, res, err := gitCli.Namespaces.ListNamespaces(&gitlab.ListNamespacesOptions{
 		ListOptions: gitlab.ListOptions{
 			PerPage: perPage,
 		},
@@ -44,7 +46,7 @@ func main() {
 	}
 
 	for _, ns := range namespaces {
-		projects, res, err := git.Projects.ListProjects(&gitlab.ListProjectsOptions{
+		projects, res, err := gitCli.Projects.ListProjects(&gitlab.ListProjectsOptions{
 			OrderBy: gitlab.String("name"),
 			Sort:    gitlab.String("asc"),
 			ListOptions: gitlab.ListOptions{
@@ -71,6 +73,13 @@ func main() {
 				return filename == p.Path
 			}) {
 				fmt.Println("Exists!")
+				repository, err := git.PlainClone(*host, false, &git.CloneOptions{
+					RecurseSubmodules: git.DefaultSubmoduleRecursionDepth,
+				})
+				if err != nil {
+					panic(err)
+				}
+				fmt.Printf("%#v\n", repository)
 			} else {
 				fmt.Println("Not Exists!")
 			}
