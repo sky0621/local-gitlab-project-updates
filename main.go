@@ -24,11 +24,6 @@ func main() {
 	ReadConfig("./config.toml")
 	cfg := NewConfig()
 
-	files, err := ioutil.ReadDir(cfg.Outdir)
-	if err != nil {
-		panic(err)
-	}
-
 	gitCli := gitlab.NewClient(nil, cfg.PrivateToken)
 	gitCli.SetBaseURL(fmt.Sprintf("%s/api/v3", cfg.Host4GitLabAPI()))
 
@@ -63,7 +58,15 @@ func main() {
 			continue
 		}
 
-		err = os.Mkdir(filepath.Join(cfg.Outdir, ns.Path), 0777)
+		_, err = os.Stat(filepath.Join(cfg.Outdir, ns.Path))
+		if err != nil {
+			err = os.Mkdir(filepath.Join(cfg.Outdir, ns.Path), 0777)
+			if err != nil {
+				panic(err)
+			}
+		}
+
+		files, err := ioutil.ReadDir(filepath.Join(cfg.Outdir, ns.Path))
 		if err != nil {
 			panic(err)
 		}
@@ -72,7 +75,9 @@ func main() {
 			if ns.Path != p.Namespace.Path {
 				continue
 			}
+			fmt.Println("===== Path =====")
 			fmt.Println(p.Path)
+			fmt.Println("===== Path =====")
 			if exists(files, func(filename string) bool {
 				return filename == p.Path
 			}) {
