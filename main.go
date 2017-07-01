@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"flag"
 	"fmt"
 
 	"io/ioutil"
@@ -22,18 +21,16 @@ const (
 
 // TODO 機能実現スピード最優先での実装なので要リファクタ
 func main() {
-	host := flag.String("host", "example.com", "GitLab Host Name")
-	pkey := flag.String("pkey", "xxxxxxxxxx", "Your GitLab Private Key")
-	outdir := flag.String("outdir", "./", "git {clone/pull} directory")
-	flag.Parse()
+	ReadConfig("./config.toml")
+	cfg := NewConfig()
 
-	files, err := ioutil.ReadDir(*outdir)
+	files, err := ioutil.ReadDir(cfg.Outdir)
 	if err != nil {
 		panic(err)
 	}
 
-	gitCli := gitlab.NewClient(nil, *pkey)
-	gitCli.SetBaseURL(fmt.Sprintf("%s/api/v3", *host))
+	gitCli := gitlab.NewClient(nil, cfg.PrivateToken)
+	gitCli.SetBaseURL(fmt.Sprintf("%s/api/v3", cfg.Host4GitLabAPI()))
 
 	namespaces, res, err := gitCli.Namespaces.ListNamespaces(&gitlab.ListNamespacesOptions{
 		ListOptions: gitlab.ListOptions{
@@ -77,18 +74,11 @@ func main() {
 				fmt.Println("Exists!")
 			} else {
 				fmt.Println("Not Exists!")
-				cmd := exec.Command("git", "clone", fmt.Sprintf("%s.git", p.WebURL), filepath.Join(*outdir, p.Path))
+				cmd := exec.Command("git", "clone", cfg.Host4GitCommand(p.PathWithNamespace), filepath.Join(cfg.Outdir, p.Path))
 				err := cmd.Run()
 				if err != nil {
 					panic(err)
 				}
-				//r, err := git.NewRepository(p.WebURL, nil)
-				//if err != nil {
-				//	panic(err)
-				//}
-				//if err = r.PullDefault(); err != nil {
-				//	panic(err)
-				//}
 			}
 		}
 

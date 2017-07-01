@@ -1,0 +1,6 @@
+scheme="http" # GitLab URL Scheme
+host="localhost:10080" # GitLab Hostname
+user="user" # GitLab User
+pass="pass" # GitLab Password
+privateToken="token" # GitLab PrivateToken (Read more https://docs.gitlab.com/ce/api/README.html#private-tokens )
+outdir="/tmp" # GitLab Repositories output directory
