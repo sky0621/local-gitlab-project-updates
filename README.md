@@ -12,4 +12,6 @@
 
 ### ・confirm and edit "config.toml"
 
+### ・do [ $glide up ]
+
 ### ・do [ $go run main.go config.go ]
