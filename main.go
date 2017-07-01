@@ -75,10 +75,10 @@ func main() {
 			if ns.Path != p.Namespace.Path {
 				continue
 			}
+			fmt.Println(p.PathWithNamespace)
 			if exists(files, func(filename string) bool {
 				return filename == p.Path
 			}) {
-				fmt.Println("Exists!")
 				err := os.Chdir(filepath.Join(cfg.Outdir, ns.Path, p.Path))
 				if err != nil {
 					panic(err)
@@ -86,7 +86,7 @@ func main() {
 				cmd := exec.Command("git", "pull")
 				err = cmd.Run()
 				if err != nil {
-					panic(err)
+					fmt.Println(err)
 				}
 			} else {
 				cmd := exec.Command("git", "clone", cfg.Host4GitCommand(p.PathWithNamespace), filepath.Join(cfg.Outdir, ns.Path, p.Path))
