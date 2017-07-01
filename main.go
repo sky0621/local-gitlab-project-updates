@@ -76,19 +76,11 @@ func main() {
 			}) {
 				fmt.Println("Exists!")
 			} else {
-				fmt.Println("Not Exists!")
 				cmd := exec.Command("git", "clone", fmt.Sprintf("%s.git", p.WebURL), filepath.Join(*outdir, p.Path))
 				err := cmd.Run()
 				if err != nil {
 					panic(err)
 				}
-				//r, err := git.NewRepository(p.WebURL, nil)
-				//if err != nil {
-				//	panic(err)
-				//}
-				//if err = r.PullDefault(); err != nil {
-				//	panic(err)
-				//}
 			}
 		}
 
