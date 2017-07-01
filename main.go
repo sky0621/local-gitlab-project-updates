@@ -63,6 +63,11 @@ func main() {
 			continue
 		}
 
+		err = os.Mkdir(filepath.Join(cfg.Outdir, ns.Path), 0777)
+		if err != nil {
+			panic(err)
+		}
+
 		for _, p := range projects {
 			if ns.Path != p.Namespace.Path {
 				continue
@@ -74,7 +79,7 @@ func main() {
 				fmt.Println("Exists!")
 			} else {
 				fmt.Println("Not Exists!")
-				cmd := exec.Command("git", "clone", cfg.Host4GitCommand(p.PathWithNamespace), filepath.Join(cfg.Outdir, p.Path))
+				cmd := exec.Command("git", "clone", cfg.Host4GitCommand(p.PathWithNamespace), filepath.Join(cfg.Outdir, ns.Path, p.Path))
 				err := cmd.Run()
 				if err != nil {
 					panic(err)
