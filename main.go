@@ -25,7 +25,7 @@ func main() {
 	cfg := NewConfig()
 
 	gitCli := gitlab.NewClient(nil, cfg.PrivateToken)
-	gitCli.SetBaseURL(fmt.Sprintf("%s/api/v3", cfg.Host4GitLabAPI()))
+	gitCli.SetBaseURL(fmt.Sprintf("%s/api/v3", cfg.GitlabApiUrl))
 
 	namespaces, res, err := gitCli.Namespaces.ListNamespaces(&gitlab.ListNamespacesOptions{
 		ListOptions: gitlab.ListOptions{
