@@ -94,6 +94,13 @@ func main() {
 				if err != nil {
 					panic(err)
 				}
+
+				branch := "develop"
+				cmd2 := exec.Command("git", "checkout", "-b", branch, "origin/"+branch)
+				err = cmd2.Run()
+				if err != nil {
+					panic(err)
+				}
 			}
 		}
 
