@@ -12,6 +12,7 @@ type Config struct {
 	Host         string
 	User         string
 	Pass         string
+	Branch       string
 	PrivateToken string
 	Outdir       string
 }
@@ -23,6 +24,7 @@ func NewConfig() *Config {
 		Host:         viper.GetString("host"),
 		User:         viper.GetString("user"),
 		Pass:         viper.GetString("pass"),
+		Branch:       viper.GetString("branch"),
 		PrivateToken: viper.GetString("privateToken"),
 		Outdir:       viper.GetString("outdir"),
 	}

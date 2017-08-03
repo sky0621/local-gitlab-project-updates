@@ -83,6 +83,7 @@ func main() {
 				if err != nil {
 					panic(err)
 				}
+
 				cmd := exec.Command("git", "pull")
 				err = cmd.Run()
 				if err != nil {
@@ -95,11 +96,15 @@ func main() {
 					panic(err)
 				}
 
-				branch := "develop"
-				cmd2 := exec.Command("git", "checkout", "-b", branch, "origin/"+branch)
-				err = cmd2.Run()
+				err = os.Chdir(filepath.Join(cfg.Outdir, ns.Path, p.Path))
 				if err != nil {
 					panic(err)
+				}
+
+				cmd3 := exec.Command("git", "checkout", "-b", cfg.Branch, "origin/"+cfg.Branch)
+				err = cmd3.Run()
+				if err != nil {
+					fmt.Println(err)
 				}
 			}
 		}
