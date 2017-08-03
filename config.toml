@@ -1,4 +1,7 @@
-gitlabApiUrl="http://localhost:10080" # GitLab API URL
-privateToken="token" # GitLab PrivateToken (Read more https://docs.gitlab.com/ce/api/README.html#private-tokens )
-gitlabSshUrl="ssh://git@localhost:10022" # GitLab SSH URL
-outDir="/tmp" # GitLab Repositories output directory
+scheme="http" # GitLab URL Scheme
+host="localhost:10080" # GitLab Hostname
+user="USER" # GitLab User
+pass="PASSWORD" # GitLab Password
+branch="master" # GitLab target branch
+privateToken="TOKEN" # GitLab PrivateToken (Read more https://docs.gitlab.com/ce/api/README.html#private-tokens )
+outDir="./" # GitLab Repositories output directory
