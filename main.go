@@ -12,6 +12,8 @@ import (
 
 	"path/filepath"
 
+	"flag"
+
 	"github.com/xanzy/go-gitlab"
 )
 
@@ -22,7 +24,11 @@ const (
 // TODO 機能実現スピード最優先での実装なので要リファクタ
 func main() {
 	fmt.Println("Start")
-	ReadConfig("./config.toml")
+
+	f := flag.String("f", "./config.toml", "Config File")
+	flag.Parse()
+
+	ReadConfig(*f)
 	cfg := NewConfig()
 
 	gitCli := gitlab.NewClient(nil, cfg.PrivateToken)
