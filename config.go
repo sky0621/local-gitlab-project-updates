@@ -8,21 +8,25 @@ import (
 
 // Config ...
 type Config struct {
-	GitlabApiUrl string
-	PrivateToken string
-	GitlabSshUrl string
-	Branch       string
-	Outdir       string
+	GitlabApiUrl      string
+	PrivateToken      string
+	GitlabSshUrl      string
+	Branch            string
+	Outdir            string
+	FilterInNameSpace string
+	FilterOutProject  string
 }
 
 // NewConfig ...
 func NewConfig() *Config {
 	return &Config{
-		GitlabApiUrl: viper.GetString("gitlabApiUrl"),
-		PrivateToken: viper.GetString("privateToken"),
-		GitlabSshUrl: viper.GetString("gitlabSshUrl"),
-		Branch:       viper.GetString("branch"),
-		Outdir:       viper.GetString("outdir"),
+		GitlabApiUrl:      viper.GetString("gitlabApiUrl"),
+		PrivateToken:      viper.GetString("privateToken"),
+		GitlabSshUrl:      viper.GetString("gitlabSshUrl"),
+		Branch:            viper.GetString("branch"),
+		Outdir:            viper.GetString("outdir"),
+		FilterInNameSpace: viper.GetString("filterInNameSpace"),
+		FilterOutProject:  viper.GetString("filterOutProject"),
 	}
 }
 

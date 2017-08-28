@@ -14,6 +14,8 @@ import (
 
 	"flag"
 
+	"strings"
+
 	"github.com/xanzy/go-gitlab"
 )
 
@@ -46,7 +48,12 @@ func main() {
 		panic(errors.New("not 200 OK"))
 	}
 
+	filterOutProjects := strings.Split(cfg.FilterOutProject, ",")
+
 	for _, ns := range namespaces {
+		if !strings.Contains(ns.Path, cfg.FilterInNameSpace) {
+			continue
+		}
 		projects, res, err := gitCli.Projects.ListProjects(&gitlab.ListProjectsOptions{
 			OrderBy: gitlab.String("name"),
 			Sort:    gitlab.String("asc"),
@@ -82,6 +89,9 @@ func main() {
 			if ns.Path != p.Namespace.Path {
 				continue
 			}
+			if isOutProject(p.Path, filterOutProjects) {
+				continue
+			}
 			fmt.Println(p.PathWithNamespace)
 			if exists(files, func(filename string) bool {
 				return filename == p.Path
@@ -115,8 +125,16 @@ func main() {
 				}
 			}
 		}
-
 	}
+}
+
+func isOutProject(p string, outProjects []string) bool {
+	for _, outPrj := range outProjects {
+		if strings.Contains(p, outPrj) {
+			return true
+		}
+	}
+	return false
 }
 
 func exists(files []os.FileInfo, fn func(filename string) bool) bool {
