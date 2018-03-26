@@ -1,0 +1,12 @@
+version: '2'
+services:
+    gitlab:
+        image: 'gitlab/gitlab-ce:latest'
+        restart: always
+        ports:
+            - '8000:80'
+        volumes:
+            - '/srv/gitlab/config:/etc/gitlab'
+            - '/srv/gitlab/logs:/var/log/gitlab'
+            - '/srv/data:/var/opt/gitlab'
+
